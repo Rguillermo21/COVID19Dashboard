@@ -1,3 +1,28 @@
+
+##############################
+## LAST UPDATED: 2023-01-02 ##
+##############################
+
+
+if (!require ("plyr")) install.packages("plyr")
+if (!require ("tidyverse")) install.packages("tidyverse")
+if (!require ("XML")) install.packages("XML")
+if (!require ("rvest")) install.packages("rvest")
+if (!require ("plotly")) install.packages("plotly")
+if (!require ("shinydashboard")) install.packages("tidyverse")
+if (!require ("shiny")) install.packages("shiny")
+if (!require ("leaflet")) install.packages("leaflet")
+if (!require ("DT")) install.packages("DT")
+if (!require ("hrbrthemes")) install.packages("hrbrthemes")
+if (!require ("RColorBrewer")) install.packages("RColorBrewer")
+if (!require ("rgdal")) install.packages("rgdal")
+if (!require ("rworldxtra")) install.packages("rworldxtra")
+if (!require ("rworldmap")) install.packages("rworldmap")
+if (!require ("rgeos")) install.packages("rgeos")
+if (!require ("lubridate")) install.packages("lubridate")
+if (!require ("zoo")) install.packages("zoo")
+
+
 library('plyr')
 library('tidyverse')
 library('XML')
@@ -15,6 +40,8 @@ library('rgdal')
 library('RColorBrewer')
 library("zoo")
 
+
+
 # Create Functions ----
 # Web scrape to read in HTML Tables
 
@@ -23,27 +50,6 @@ scrape_table <- function(x, header = TRUE) { # I was hungry
     html_node("table") %>% # Rvest parses xml document for node "table"
     html_table(header = header) # Default value is TRUE
 } # Rvest turns table into data.frame
-
-
-
-
-
-#############
-### TO DO ###
-#############
-
-# 1. Total cases vs Cases/Population map?
-#       line 560
-# 2. Organize the data tables in Shiny output
-#    2a. Maybe layer on top of map but how?
-# 3. Increase height of shiny map
-#    3a. It seems like the box is limiting it's height // adding the slider made the map smaller 
-# 4. Runtime is too long for ShinyApps.io publishing (Max 60s wait)
-#    4a. Need to create a separate file for cleaning the data
-#    4b. Then save the cleaned files as CSV and upload it 
-#    4c. This script will source() the needed files or read.csv() them so we don't need to repeat the cleaning
-
-#  FOR SPEED: https://posit.co/blog/4-tips-to-make-your-shiny-dashboard-faster/
 
 
 
@@ -170,13 +176,6 @@ Corona_new <- Corona_new %>%
   mutate(total_vaccinations = na.locf(total_vaccinations, na.rm = FALSE),
          total_cases = na.locf(total_cases, na.rm = FALSE),
          total_deaths = na.locf(total_deaths, na.rm = FALSE))
-
-Corona_new %>% filter(Date == Sys.Date()-100) %>%
-  ungroup() %>%
-  summarize(total_vaccinations = sum(total_vaccinations, na.rm = TRUE),
-            total_cases = sum(total_cases, na.rm = TRUE),
-            total_deaths = sum(total_deaths, na.rm = TRUE))
-
 
 ### WESTERN SAHARA ###
 ### DATA ONLY FROM MOROCCAN GOVERNMENT CONTROLLED TERRITORIES: 

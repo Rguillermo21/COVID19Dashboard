@@ -3,6 +3,21 @@
 ############################
 
 # Load Packages ----
+
+if (!require ("plyr")) install.packages("plyr")
+if (!require ("tidyverse")) install.packages("tidyverse")
+if (!require ("plotly")) install.packages("plotly")
+if (!require ("shinydashboard")) install.packages("shinydashboard")
+if (!require ("shiny")) install.packages("shiny")
+if (!require ("leaflet")) install.packages("leaflet")
+if (!require ("DT")) install.packages("DT")
+if (!require ("RColorBrewer")) install.packages("RColorBrewer")
+if (!require ("rgdal")) install.packages("rgdal")
+if (!require ("rworldxtra")) install.packages("rworldxtra")
+if (!require ("rworldmap")) install.packages("rworldmap")
+if (!require ("rgeos")) install.packages("rgeos")
+if (!require ("lubridate")) install.packages("lubridate")
+
 library('plyr')
 library('tidyverse')
 library('plotly')
@@ -16,7 +31,6 @@ library('rworldmap')
 library('rworldxtra')
 library('rgdal')
 library('RColorBrewer')
-library("hrbrthemes")
 
 # setwd("C:\\Users\\Raffy\\OneDrive\\Documents\\DATA SCIENCE PROJECTS")
 Corona_new <- read.csv("corona_main.csv") %>%
@@ -134,7 +148,7 @@ world_cases <- ggplotly(corona_global %>%
                                 '#fdbb84', 
                                 "#fc8d59" , 
                                 "#ef6548",
-                               "#d7301f",
+                                "#d7301f",
                                 "#d7301f")), 
                       height = 225) %>%
   
@@ -148,8 +162,6 @@ world_cases <- ggplotly(corona_global %>%
     xaxis = list(range = c(w_min_range, w_max_range)),
     yaxis = list(range = c(10, log(max(corona_global$total_cases, na.rm = TRUE))+2)),
     legend = list(title = list(text = "")))
-
-world_cases
 
 
 # Shiny Dashboard  ----
@@ -172,19 +184,6 @@ Vaccinated_table <- Corona_new %>%
   group_by(NAME) %>%
   summarize(total_vaccinated = max(replace_na(total_vaccinations, 0))) %>%
   arrange(desc(total_vaccinated))
-
-
-
-### PALETTE FOR SHINY CHLOROPETH
-mb <- c(0, 10000,100000,1000000,10000000,50000000, 100000000, Inf)
-
-mp <- colorBin(palette="OrRd", 
-                      domain=Corona_new$total_cases, 
-                      na.color="transparent", 
-                      bins=mb)
-
-
-
 
 
 #########################################################################################
@@ -492,7 +491,6 @@ server = function(input, output){
   
   
   
-  ## Thanks to cjb from StackOVerflow for this: 
   observe ({
     if(!is.null(input$time)){
       world_spdf@data <- left_join(world_spdf@data, covid_sp(), by = "NAME")
