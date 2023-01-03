@@ -1,6 +1,8 @@
 # COVID-19 Dashboard
 Geomapping global COVID-19 timeseries data through an interactive dashboard while delivering primary indicators of interest in a convenient fashion. 
 
+https://rguillermo.shinyapps.io/COVID19_Dashboard/
+
 The visualization chosen is a chloropeth map that reflects new cases globally. The chloropeth map was chosen as it helps to more easily visualize the distribution of global cases with respect to each country. Alternatively, another map that could be chosen (the option to change maps will be coming later...) that shows the proportion of cases per population (Either total cases or new cases). 
 
 The data for this project was primarily sourced from https://ourworldindata.org/coronavirus 
