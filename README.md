@@ -1,5 +1,7 @@
 # COVID-19 Dashboard
-Geomapping global COVID-19 timeseries data through an interactive dashboard while delivering primary indicators of interest in a convenient fashion.
+Geomapping global COVID-19 timeseries data through an interactive dashboard while delivering primary indicators of interest in a convenient fashion. 
+
+The visualization chosen is a chloropeth map that reflects new cases globally. The chloropeth map was chosen as it helps to more easily visualize the distribution of global cases with respect to each country. Alternatively, another map that could be chosen (the option to change maps will be coming later...) that shows the proportion of cases per population (Either total cases or new cases). 
 
 The data for this project was primarily sourced from https://ourworldindata.org/coronavirus 
 The data for Western Sahara was sourced from Reuters.com but the data only reflects cases in the territories controlled by the Moroccan government and not the entire area because of their on-going border dispute.
@@ -12,3 +14,6 @@ The mapping package used for the spatial analytics was provided by leaflet and C
 
 The spatial polygons that defined the country borders were provided by Bjorn Sandvik, themapticmapping.com.
 Some of the defined spatial boreders are highly contested and some of the borders have even changed since the spatial polygons were initially created. Additionally, because some border disputes are still on-going and are unstable, the borders provided in this map may not accurately reflect the evolving geo-political landscape.
+
+
+Various graphs are provided in the bottom-right of the dashbaord and are collapsible. The graphs, tables, and indicators are continuously updated to reflect the user selection for a specific time-period. The map can also be animated 
