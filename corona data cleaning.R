@@ -73,8 +73,6 @@ new_data = read.csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
   mutate(date = as.Date(date)) %>%
   dplyr::rename(Date = date)
 
-
-#paste0("c(",paste0(which(!colnames(new_data) %in% colnames(world_spdf@data)), sep = "", collapse = ",") , ")")
 continent_code = c("North America", "South America", "Asia", "Africa", "Oceania", "Antarctica", "Europe", "World") ## Need to separate out 
 class_code = c("High income", 
                "Upper middle income",
@@ -88,7 +86,6 @@ covid_continents = new_data %>%
 
 ## COVID AGGREGATED BY COUNTRIES
 ## I WANNA SEE REGIONS THOUGH // MORE VARIATION WITHIN COUNTRIES FOR MORE ACCURATE PREDICTIONS
-
 covid_class = new_data %>%
   filter(location %in% class_code)
 
@@ -108,7 +105,7 @@ Corona_new = new_data %>%
          population, human_development_index)
 
 
-## IMPUTE MISSING VALUES/ROWS
+## ADD MISSING DATA
 ## We are holding these values constant since we do not have much accurate information
 
 ### SVALBARD ###
@@ -118,10 +115,12 @@ Corona_new = new_data %>%
 ## This is not a generalizable if else statement and only works here because the data for Svalbard is sparse
 ## Not a lot of official statistics are posted for Svalbard or Western Sahara
 
-## We also run into the issue of scalability doing hard-coded imputations. 
+##  We also run into the issue of scalability when we hard code this. 
 ##  We can make this more robust if we impute missing values for entries past 2022-01-11 with the current COVID count
 ##  By web scraping it from a different source then OWID
+
 all_dates = seq(min(Corona_new$Date), max(Corona_new$Date), 1)
+
 for (i in 1:length(all_dates)) {
   if (nrow(Corona_new %>% filter(NAME %in% "Western Sahara") %>% select(Date)) < length(all_dates)) {
     ifelse(all_dates[i] > as.Date("2020-04-20"),
@@ -197,11 +196,11 @@ corona_vaccine_total <- Corona_new %>% select(-c(total_cases, new_cases, new_cas
                                                  total_deaths, new_deaths, new_deaths_smoothed))
 ## We will query these in pgadmin4 
 ## Breaking down the data is easier to deal with
-write.csv(corona_new_total, file = "C:\\Users\\Raffy\\OneDrive\\Documents\\DATA SCIENCE PROJECTS\\Corona data\\corona_new_total.csv")
-write.csv(corona_deaths_total, file = "C:\\Users\\Raffy\\OneDrive\\Documents\\DATA SCIENCE PROJECTS\\Corona data\\corona_new_deaths.csv")
-write.csv(corona_vaccine_total, file = "C:\\Users\\Raffy\\OneDrive\\Documents\\DATA SCIENCE PROJECTS\\Corona data\\corona_new_vaccine.csv")
-write.csv(Corona_new, file = "C:\\Users\\Raffy\\OneDrive\\Documents\\DATA SCIENCE PROJECTS\\Corona data\\corona_main.csv")
-write.csv(covid_continents, file = "C:\\Users\\Raffy\\OneDrive\\Documents\\DATA SCIENCE PROJECTS\\Corona data\\corona_global.csv")
+write.csv(corona_new_total, file = "corona_new_total.csv")
+write.csv(corona_deaths_total, file = "corona_new_deaths.csv")
+write.csv(corona_vaccine_total, file = "corona_new_vaccine.csv")
+write.csv(Corona_new, file = "corona_main.csv")
+write.csv(covid_continents, file = "corona_global.csv")
 
 
 
