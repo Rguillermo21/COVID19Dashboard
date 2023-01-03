@@ -1,5 +1,5 @@
 ############################
-# WORKING AS OF 2022-12-13 #
+# WORKING AS OF 2023-01-02 #
 ############################
 
 # Load Packages ----
@@ -32,7 +32,6 @@ library('rworldxtra')
 library('rgdal')
 library('RColorBrewer')
 
-# setwd("C:\\Users\\Raffy\\OneDrive\\Documents\\DATA SCIENCE PROJECTS")
 Corona_new <- read.csv("corona_main.csv") %>%
   mutate(Date = as.Date(Date))
 
@@ -74,10 +73,8 @@ world_spdf@data$NAME <- world_spdf@data$NAME %>%
 
 # Create Plot  ----
 
-# Creating the plots
-
 # Creating these as object saves space since we will recycle this code
-# Dark theme code consistent with all of layout | Found color # on website html
+# Dark theme code consistent with all of layout 
 
 dark_theme <- theme(axis.title.x = element_blank(),
                     axis.ticks = element_line(color = '#928f8c'),
@@ -165,9 +162,6 @@ world_cases <- ggplotly(corona_global %>%
 
 
 # Shiny Dashboard  ----
-## Plots
-
-
 # Tables to be output in the server and shown in corresponding columns
 
 Confirmed_table <- Corona_new %>%
@@ -185,61 +179,6 @@ Vaccinated_table <- Corona_new %>%
   summarize(total_vaccinated = max(replace_na(total_vaccinations, 0))) %>%
   arrange(desc(total_vaccinated))
 
-
-#########################################################################################
-## TO BE ADDED AS AN OPTION
-
-# cases_perc = Corona_new %>% 
-#   filter(Date == "2022-07-05") %>%
-#   group_by(NAME) %>%
-#   mutate(perc = (total_cases/population)*100)
-# 
-# world_case_perc = world_spdf
-# world_case_perc@data <- world_spdf@data %>%
-#   left_join(cases_perc, by = "NAME")
-# 
-# mybins.perc <- c(0, 0.25, 0.5, 10 , 20, 30, 40, 50, 75)
-# mypalette.perc <- colorBin(palette="OrRd", domain=cases_perc$perc, na.color="transparent", bins=mybins.perc)
-# 
-# # Prepare the text for tooltips:
-# tooltip.perc <- paste(
-#   "Country: ", world_case_perc@data$NAME,"<br/>", 
-#   "Total Deaths: ", world_case_perc@data$total_deaths, "<br/>", 
-#   "Total Cases: ", world_case_perc@data$total_cases, "<br/>",
-#   "Population: ", world_case_perc@data$population,
-#   sep="") %>%
-#   lapply(htmltools::HTML)
-# 
-# 
-# 
-# cases_per_pop <- leaflet(world_case_perc) %>% 
-#   addProviderTiles(provider = "CartoDB.DarkMatter")  %>% 
-#   setView( lat=10, lng=0 , zoom=2) %>%
-#   addPolygons( 
-#     fillColor = ~mypalette.perc(perc), 
-#     stroke=TRUE, 
-#     fillOpacity = 0.9, 
-#     color="grey", 
-#     weight=0.3,
-#     label = tooltip.perc,
-#     labelOptions = labelOptions( 
-#       style = list("font-weight" = "normal", padding = "3px 8px"), 
-#       textsize = "13px", 
-#       direction = "auto"
-#     )
-#   ) %>%
-#   addLegend( pal=mypalette.perc, 
-#              values=~perc, opacity=0.9, 
-#              title = "Total Cases per Population", 
-#              position = "bottomleft"
-#   )
-# 
-# cases_per_pop
-
-########################################################################################
-
-## Return max on vaccinated because the count is cumulative // Does not go down
-
 ### PALETTE FOR SHINY CHLOROPETH
 mb <- c(0, 10, 100, 500, 1000, 10000, 100000, 1500000, Inf)
 
@@ -249,7 +188,7 @@ mp <- colorBin(palette="OrRd",
                bins=mb)
 
 
-
+######### SHINY DASHBOARD #########
 header <- dashboardHeader(
   disable = TRUE
 )
@@ -461,9 +400,6 @@ ui <- dashboardPage(header = header,
                     sidebar = sidebar,
                     body = body)
 
-
-
-
 server = function(input, output){
   ## Reactive DF that will filter whatever the chosen time is on slider
   covid_sp <- reactive({
@@ -488,7 +424,6 @@ server = function(input, output){
                  opacity=0.85,
                  title = "New Cases",
                  position = "bottomleft" )})
-  
   
   
   observe ({
