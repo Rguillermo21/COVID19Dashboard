@@ -12,7 +12,7 @@ COVID-19 case reports for Svalbard are unreliable and government reports are irr
 https://en.wikipedia.org/wiki/COVID-19_pandemic_in_Svalbard
 https://www.sysselmesteren.no/en/news/2022/01/status-covid-19-on-svalbard-week-1/
 
-The mapping package used for the spatial analytics was provided by leaflet and CARTO. 
+The mapping package used for the spatial analytics was provided by leaflet using CARTO's Dark Matter theme. 
 
 The spatial polygons that defined the country borders were provided by Bjorn Sandvik, themapticmapping.com.
 Some of the defined spatial boreders are highly contested and some of the borders have even changed since the spatial polygons were initially created. Additionally, because some border disputes are still on-going and are unstable, the borders provided in this map may not accurately reflect the evolving geo-political landscape.
