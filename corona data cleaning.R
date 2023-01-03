@@ -194,8 +194,8 @@ corona_deaths_total <- Corona_new %>% select(-c(total_cases, new_cases, new_case
 corona_vaccine_total <- Corona_new %>% select(-c(total_cases, new_cases, new_cases_smoothed, 
                                                  total_tests, new_tests, new_tests_smoothed,
                                                  total_deaths, new_deaths, new_deaths_smoothed))
-## We will query these in pgadmin4 
-## Breaking down the data is easier to deal with
+
+## Breaking down the data is easier to deal with when we need it
 write.csv(corona_new_total, file = "corona_new_total.csv")
 write.csv(corona_deaths_total, file = "corona_new_deaths.csv")
 write.csv(corona_vaccine_total, file = "corona_new_vaccine.csv")
