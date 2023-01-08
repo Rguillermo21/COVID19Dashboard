@@ -6,6 +6,7 @@ https://rguillermo.shinyapps.io/COVID19_Dashboard/
 The visualization chosen is a chloropeth map that reflects new cases globally. The chloropeth map was chosen as it helps to more easily visualize the distribution of global cases with respect to each country. Alternatively, another map that could be chosen (the option to change maps will be coming later...) that shows the proportion of cases per population (Either total cases or new cases). 
 
 The data for this project was primarily sourced from https://ourworldindata.org/coronavirus 
+
 The data for Western Sahara was sourced from Reuters.com but the data only reflects cases in the territories controlled by the Moroccan government and not the entire area because of their on-going border dispute.
 
 COVID-19 case reports for Svalbard are unreliable and government reports are irregular.
