@@ -133,7 +133,7 @@ new_cases <- ggplotly(Corona_new %>%
 # unclass(as.Date("1970-01-01")) will return 0 because 0 days since UNIX epoch
 
 # We want to get the last date of our data using last(date) 
-w_min_range = unclass(last(corona_global$Date)-(365*1.5)) 
+w_min_range = unclass(last(corona_global$Date)-round(365*1.5)) 
 w_max_range = unclass(last(corona_global$Date + 14))
 
 world_cases <- ggplotly(corona_global %>%
