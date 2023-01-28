@@ -45,7 +45,7 @@ library("zoo")
 # Create Functions ----
 # Web scrape to read in HTML Tables
 
-scrape_table <- function(x, header = TRUE) { # I was hungry
+scrape_table <- function(x, header = TRUE) { 
   read_html(x) %>% # read website html into XML document
     html_node("table") %>% # Rvest parses xml document for node "table"
     html_table(header = header) # Default value is TRUE
