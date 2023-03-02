@@ -1,5 +1,6 @@
 # COVID-19 Dashboard
-Geomapping global COVID-19 timeseries data through an interactive dashboard while delivering primary indicators of interest in a convenient fashion. 
+Mapping global COVID-19 timeseries data through an online interactive dashboard. 
+
 
 VIEW HERE: 
 https://rguillermo.shinyapps.io/COVID19_Dashboard/
