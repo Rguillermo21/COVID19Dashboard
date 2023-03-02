@@ -1,5 +1,5 @@
 # COVID-19 Dashboard
-Mapping global COVID-19 timeseries data through an online interactive dashboard. 
+Mapping global COVID-19 timeseries data through an online interactive dashboard.
 
 
 VIEW HERE: 
