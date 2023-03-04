@@ -1,4 +1,6 @@
 -- Creating our table so we can import our data into pgAdmin4
+-- Make sure NA/NULL are treated in the CSV to 0, otherwise they will be read in as a text and will fail to be imported
+-- Make sure to check CSV for scientific notation instead of numbers as well or import will fail
 CREATE TABLE public.covid_data
 (
     ID BIGSERIAL PRIMARY KEY NOT NULL,
