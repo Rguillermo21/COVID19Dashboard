@@ -1,3 +1,29 @@
+-- Creating our table so we can import our data into pgAdmin4
+CREATE TABLE public.covid_data
+(
+    ID BIGSERIAL PRIMARY KEY NOT NULL,
+    name text NOT NULL,
+    date date NOT NULL,
+    total_cases bigint,
+    new_cases integer,
+    total_deaths bigint,
+    new_deaths integer,
+    total_tests bigint,
+    new_tests integer,
+    total_vaccinations bigint,
+    new_vaccinations integer,
+    median_age real,
+    population_density double precision,
+    extreme_poverty real,
+    gdp_per_capita double precision,
+    handwashing_facilities double precision,
+    life_expectancy real,
+    hospital_beds_per_thousand double precision,
+    population bigint,
+    human_development_index double precision,
+)
+
+
 -- Familiarizing myself at the data and columns
 SELECT *
 FROM public.covid
@@ -132,19 +158,19 @@ SELECT
 	sum(new_deaths)/MAX(population)*100 AS deaths_per_pop,
 	sum(new_vaccinations)/MAX(population)*100 AS vacc_per_pop
 FROM (SELECT 
-	  	d.id,
-	  	ref.name,
-	    ref.date,
-	    total_deaths,
-	  	new_deaths,
-	    total_vaccinations,
-	  	new_vaccinations,
-	  	d.population	  	
-	  FROM covid_deaths AS d
-	  LEFT JOIN reference_table AS ref
-	  ON d.id = ref.id
-	  LEFT JOIN covid_vaccinations AS v
-	  ON d.id = v.id) AS e
+	  d.id,
+	  ref.name,
+	  ref.date,
+	  total_deaths,
+	  new_deaths,
+	  total_vaccinations,
+	  new_vaccinations,
+	  d.population	
+	FROM covid_deaths AS d
+	LEFT JOIN reference_table AS ref
+	ON d.id = ref.id
+	LEFT JOIN covid_vaccinations AS v
+	ON d.id = v.id) AS e
 WHERE name NOT LIKE 'International' 
 GROUP BY name
 
@@ -167,9 +193,9 @@ SELECT
 FROM covid_cases
 WHERE date = '2023-02-26' AND 
 	  total_cases > (SELECT 
-						AVG(total_cases)
-					 FROM covid
-					 WHERE date = '2023-02-26')
+				AVG(total_cases)
+			 FROM covid
+			 WHERE date = '2023-02-26')
 ORDER BY total_cases;
 
 -- Correlated subquery
@@ -179,7 +205,7 @@ SELECT
 	AVG(new_cases) AS average_cases_per_day,
 	ROUND((SELECT
 			AVG(new_cases)
-		   FROM covid_cases), 2) AS average_global_cases,
+		FROM covid_cases), 2) AS average_global_cases,
 	(SELECT 
 	 	MAX(handwashing_facilities)
 	 FROM covid AS c
@@ -190,19 +216,19 @@ SELECT
 	  GROUP BY name
 	  HAVING cc.name = t.name) AS median_age
 FROM (SELECT 
-	  	d.id,
-	  	ref.name,
-	    ref.date,
-	    total_cases, 
-	  	new_cases,
-	  	d.population	  	
+	  d.id,
+	  ref.name,
+	  ref.date,
+	  total_cases, 
+	  new_cases,
+	  d.population	  	
 	  FROM covid_cases AS d
 	  LEFT JOIN reference_table AS ref
 	  ON d.id = ref.id) AS cc
 GROUP BY name
 HAVING AVG(new_cases) > (SELECT 
-						 AVG(new_cases)
-					     FROM covid_cases)
+				AVG(new_cases)
+			 FROM covid_cases)
 ORDER BY average_cases_per_day DESC;
 
 -- Although we see that US, India, France, Germany, Brazil are in top 5 of cases per day. Maybe this is just due to large 
@@ -219,19 +245,19 @@ SELECT
 	MAX(total_cases) AS total_cases,
 	MAX(population) AS Population
 FROM (SELECT 
-	  	d.id,
-	  	ref.name,
+	    d.id,
+	    ref.name,
 	    ref.date,
 	    total_cases, 
-	  	new_cases,
-	  	d.population	  	
+	    new_cases,
+	    d.population	  	
 	  FROM covid_cases AS d
 	  LEFT JOIN reference_table AS ref
 	  ON d.id = ref.id) AS cc
 GROUP BY name
 HAVING AVG(new_cases) > (SELECT 
-						 AVG(new_cases)
-					     FROM covid_cases)
+				AVG(new_cases)
+			 FROM covid_cases)
 ORDER BY case_per_pop DESC;
 
 -- Explore United States
