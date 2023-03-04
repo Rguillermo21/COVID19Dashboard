@@ -177,12 +177,6 @@ WHERE name NOT LIKE 'International'
 GROUP BY name
 
 
-
-
-
-
-
-
 -- Which countries have higher than average cases/deaths/vaccinations
 -- 		Look at raw numbers + pct to factor for differences in population magnitude
 -- We look at the most recent date in our data for no duplicate country entries and max totals
