@@ -25,7 +25,6 @@ CREATE TABLE public.covid_data
     human_development_index double precision,
 )
 
-
 -- Familiarizing myself at the data and columns
 SELECT *
 FROM public.covid
@@ -154,27 +153,44 @@ FROM
 		FROM public.covid
 	) AS t; -- Subquery in FROM is cleaner than create a temp table
 
+-- Nested correlated subquery
+-- Peru, Bulgaria, Bosnia and Herzegovina, Hungary and North Macedonia has high deaths per population
+-- Peru is #1 deaths but also has very high vaccination rate per population. 
+-- If we add the population and vacc_per_pop column for the next 5 countries, it would be similar to Peru's numbers
 
 SELECT 
 	name AS country,
-	sum(new_deaths)/MAX(population)*100 AS deaths_per_pop,
-	sum(new_vaccinations)/MAX(population)*100 AS vacc_per_pop
+	(SELECT total_cases 
+	 FROM (SELECT 
+		    name,
+		    MAX(total_cases) AS total_cases 	
+	 	FROM covid_cases AS cc
+	 	LEFT JOIN reference_table AS ref
+	        ON cc.id = ref.id
+		GROUP BY NAME) AS cc
+	 WHERE e.name = cc.name) AS total_cases,
+	MAX(total_deaths) AS total_death,
+	MAX(total_vaccinations) AS total_vacc,
+	MAX(population) AS population,
+	ROUND(SUM(CAST(new_deaths AS NUMERIC))/MAX(population)*100, 2) AS deaths_per_pop,
+	ROUND(SUM(CAST(new_vaccinations AS NUMERIC))/MAX(population)*100, 2) AS vacc_per_pop
 FROM (SELECT 
-	  d.id,
-	  ref.name,
-	  ref.date,
-	  total_deaths,
-	  new_deaths,
-	  total_vaccinations,
-	  new_vaccinations,
-	  d.population	
-	FROM covid_deaths AS d
-	LEFT JOIN reference_table AS ref
-	ON d.id = ref.id
-	LEFT JOIN covid_vaccinations AS v
-	ON d.id = v.id) AS e
+	    d.id,
+	    ref.name,
+	    ref.date,
+	    total_deaths,
+	    new_deaths,
+	    total_vaccinations,
+	    new_vaccinations,
+	    d.population	  	
+	  FROM covid_deaths AS d
+	  LEFT JOIN reference_table AS ref
+	  ON d.id = ref.id
+	  LEFT JOIN covid_vaccinations AS v
+	  ON d.id = v.id) AS e
 WHERE name NOT LIKE 'International' 
 GROUP BY name
+ORDER BY deaths_per_pop DESC;
 
 
 -- Which countries have higher than average cases/deaths/vaccinations
@@ -201,7 +217,7 @@ SELECT
 	AVG(new_cases) AS average_cases_per_day,
 	ROUND((SELECT
 			AVG(new_cases)
-		FROM covid_cases), 2) AS average_global_cases,
+		   FROM covid_cases), 2) AS average_global_cases,
 	(SELECT 
 	 	MAX(handwashing_facilities)
 	 FROM covid AS c
@@ -212,12 +228,12 @@ SELECT
 	  GROUP BY name
 	  HAVING cc.name = t.name) AS median_age
 FROM (SELECT 
-	  d.id,
-	  ref.name,
-	  ref.date,
-	  total_cases, 
-	  new_cases,
-	  d.population	  	
+	    d.id,
+	    ref.name,
+	    ref.date,
+	    total_cases, 
+	    new_cases,
+	    d.population	  	
 	  FROM covid_cases AS d
 	  LEFT JOIN reference_table AS ref
 	  ON d.id = ref.id) AS cc
@@ -236,7 +252,7 @@ SELECT
 	AVG(new_cases) AS average_cases_per_day,
 	ROUND((SELECT
 			AVG(new_cases)
-		   FROM covid_cases), 2) AS average_global_cases,
+	       FROM covid_cases), 2) AS average_global_cases,
 	ROUND(MAX(CAST(total_cases AS NUMERIC))/MAX(CAST(population AS NUMERIC))*100, 2) AS case_per_pop,
 	MAX(total_cases) AS total_cases,
 	MAX(population) AS Population
@@ -252,7 +268,7 @@ FROM (SELECT
 	  ON d.id = ref.id) AS cc
 GROUP BY name
 HAVING AVG(new_cases) > (SELECT 
-				AVG(new_cases)
+				 AVG(new_cases)
 			 FROM covid_cases)
 ORDER BY case_per_pop DESC;
 
@@ -279,6 +295,8 @@ WITH vc AS
 	SELECT
 		total_vaccinations,
 		total_deaths,
+		new_vaccinations,
+		new_deaths,
 		ref.name
 	FROM covid_vaccinations AS v
 	LEFT JOIN reference_table AS ref
@@ -286,15 +304,21 @@ WITH vc AS
 	LEFT JOIN covid_deaths AS d
 	ON d.id = v.id
 )
-
-
+			   
 SELECT 
-	total_vaccinations,
-	AVG(total_vaccinations)
+	name,
+	ROUND(MAX(total_vaccinations), 2) AS total_vaccinations,
+	ROUND(MAX(total_deaths), 2) AS total_deaths,
+	ROUND(AVG(new_vaccinations), 2) AS avg_daily_vacc,
+	ROUND(AVG(new_deaths), 2) AS avg_daily_deaths,
+	ROUND((SELECT AVG(new_vaccinations) FROM vc), 2 ) AS global_avg_daily_vaccinations,
+	ROUND((SELECT AVG(new_deaths) FROM vc), 2) AS global_avg_daily_deaths
 FROM vc
 GROUP BY name
-HAVING total_vaccinations > AVG(total_vaccinations) AND total_deaths > AVG(total_deaths)
+HAVING AVG(new_vaccinations) > (SELECT AVG(new_vaccinations) FROM vc) AND
+		AVG(new_deaths) > (SELECT AVG(new_deaths) FROM vc) 
+ORDER BY avg_daily_deaths DESC
 
-
-
+-- 25 countries receive more daily vaccinations on average than other countries, 
+-- yet have more deaths per day than the global avg
 
